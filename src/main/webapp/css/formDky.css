@@ -1,0 +1,18 @@
+.form-login {
+
+    width: 500px;
+
+    margin: 150px auto;
+    background-color: #fff;
+    border: 2px solid #111;
+}
+.title {
+    margin: 50px 50px;
+    text-align: center;
+}
+p.text {
+    text-align: center;
+}
+.form-container {
+    padding: 10px;
+}
