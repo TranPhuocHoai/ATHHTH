@@ -112,8 +112,7 @@
                             </div>
                             <!-- Save changes button-->
                             <button class="btn btn-primary" type="submit">Lưu thông tin</button>
-                            <a href="KeyController?command=suport" class="btn btn-primary" type="button">Báo cáo lộ
-                                khóa!</a>
+
                             <button class="btn btn-primary" type="button"><a href="profile?command=logout"
                                                                              style=" color: #fff;">Đăng xuất</a>
                             </button>
