@@ -41,12 +41,41 @@ public class KeyController extends HttpServlet {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + jsonFileName + "\"");
             response.getWriter().write(jsonKey.toJSONString());
         }
-
+        if (command != null && command.equals("suport")) {
+            request.getRequestDispatcher("key.jsp").forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        String publicKey = request.getParameter("publicKey");
+        String privateKey = request.getParameter("privateKey");
+        Account account = (Account) request.getSession().getAttribute("auth");
+        RSA rsa = new RSA();
+        String testKey = "";
+        try {
+            String encrypt = rsa.encrypt(account.getUser(), privateKey);
+            testKey = rsa.decrypt(encrypt, publicKey);
+        } catch (Exception e) {
+            request.setAttribute("mess", "Khóa không hợp lệ, hãy thử lại!");
+            request.getRequestDispatcher("key.jsp").forward(request,response);
+        }
+        if (testKey.equals(account.getUser())){
+            LoginService.reportKeyUpA(getDateNow(), account.getId());
+            LoginService.addKeyUpA(account.getId(), publicKey, getDateNow());
+            request.setAttribute("mess", "Cấp khóa mới thành công!");
+            request.getRequestDispatcher("profile.jsp").forward(request,response);
+        } else {
+            request.setAttribute("mess", "Khóa không hợp lệ, hãy thử lại!");
+            request.getRequestDispatcher("key.jsp").forward(request,response);
+        }
+    }
+    public static String getDateNow() {
+        ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+        ZonedDateTime nowInVietnam = ZonedDateTime.now(vietnamZone);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy a hh:mm:ss");
+        String formattedDate = nowInVietnam.format(formatter);
+        return formattedDate;
     }
 
 }
